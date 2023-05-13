@@ -47,9 +47,6 @@ export default function Home() {
 
   return (
     <Box w="full" h="full" m={0} backgroundColor={"#121721"}>
-      <Head>
-        <title>Film Faves</title>
-      </Head>
       <CustomNavigation />
       <Tabs
         isFitted={windowSize[0] <= 500}
