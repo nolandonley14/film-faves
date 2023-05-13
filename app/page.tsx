@@ -94,7 +94,7 @@ export default function Home() {
                   setPage={setPage}
                 />
               )}
-              {isLoading ? (
+              {!movies || !movies.returnData ? (
                 <SimpleGrid columns={{ sm: 1, md: 2, lg: 5 }} w="full" p={4}>
                   <Skeleton rounded="lg" height="200px" m={5} />
                   <Skeleton rounded="lg" height="200px" m={5} />
@@ -122,11 +122,13 @@ export default function Home() {
                   </div>
                 ) : null
               ) : null}
-              <CustomPagination
-                page={page}
-                setPage={setPage}
-                totalRecords={totalRecords}
-              />
+              {!movies || !movies.returnData ? null : (
+                <CustomPagination
+                  page={page}
+                  setPage={setPage}
+                  totalRecords={totalRecords}
+                />
+              )}
             </Flex>
           </TabPanel>
           <TabPanel>
