@@ -17,7 +17,7 @@ export async function GET(req: Request) {
       type: "movie"
     },
     headers: {
-      'X-RapidAPI-Key': "d31283acfcmsh840a8bd999fdd8cp16abd5jsn09bb957d6648",
+      'X-RapidAPI-Key': process.env.RAPID_API_KEY,
       'X-RapidAPI-Host': 'movie-database-alternative.p.rapidapi.com'
     }
   };
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
         r: 'json',
       },
       headers: {
-        'X-RapidAPI-Key':  "d31283acfcmsh840a8bd999fdd8cp16abd5jsn09bb957d6648",
+        'X-RapidAPI-Key':  process.env.RAPID_API_KEY,
         'X-RapidAPI-Host': 'movie-database-alternative.p.rapidapi.com'
       }
     }

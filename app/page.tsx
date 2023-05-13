@@ -21,6 +21,7 @@ import useSWR from "swr";
 import CustomPagination from "@/components/pagination";
 import { getSavedMovies } from "@/utils/getSavedMovies";
 import WatchlistGrid from "@/components/watchlistGrid";
+import Head from "next/head";
 
 const fetcher = (url: string) =>
   fetch(url, {
@@ -63,6 +64,9 @@ export default function Home() {
 
   return (
     <Box w="full" h="full" m={0} backgroundColor={"#121721"}>
+      <Head>
+        <title>Film Faves</title>
+      </Head>
       <CustomNavigation />
       <Tabs
         isFitted={windowSize[0] <= 500}
