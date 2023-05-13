@@ -139,9 +139,13 @@ export default function Home() {
                 <Skeleton></Skeleton>
               ) : Object.keys(savedMovies).length > 0 ? (
                 <WatchlistGrid
-                  movies={Object.keys(savedMovies).map(
-                    (id: string) => savedMovies[id]
-                  )}
+                  movies={
+                    savedMovies
+                      ? Object.keys(savedMovies).map(
+                          (id: string) => savedMovies[id]
+                        )
+                      : []
+                  }
                   setSavedMovies={setSavedMovies}
                   savedMovies={savedMovies}
                 />
