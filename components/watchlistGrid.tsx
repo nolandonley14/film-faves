@@ -28,7 +28,7 @@ type WatchlistGridType = {
   savedMovies: SaveState;
 };
 
-type MovieCardType = {
+type WatchlistTypeCard = {
   movie: SavedMovie;
 };
 
@@ -63,7 +63,7 @@ const WatchlistGrid = ({
     addUpdateReviewForMovie(movie, text, savedMovies, setSavedMovies);
   };
 
-  const MovieCard = ({ movie }: MovieCardType) => {
+  const MovieCard = ({ movie }: WatchlistTypeCard) => {
     const saved = savedMovies
       ? Object.keys(savedMovies).includes(movie.movie.imdbID)
       : false;

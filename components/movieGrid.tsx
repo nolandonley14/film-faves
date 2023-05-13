@@ -1,5 +1,5 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { MovieDetails, SavedMovie } from "@/utils/types";
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   AspectRatio,
   VStack,
   useDisclosure,
+  Skeleton,
 } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import { SiRottentomatoes } from "react-icons/si";
@@ -21,12 +22,15 @@ import {
   setMovieToWatched,
 } from "@/utils/getSavedMovies";
 import MovieModal from "./movieModal";
+import useSWR from "swr";
+import CustomPagination from "./pagination";
 
 type MovieGridType = {
-  movies: MovieDetails[];
   setSavedMovies: Dispatch<SetStateAction<SaveState>>;
   savedMovies: SaveState;
-  windowWidth: number;
+  searchTerm: string;
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
 };
 
 type MovieCardType = {
@@ -37,11 +41,34 @@ export type SaveState = {
   [id: string]: SavedMovie;
 };
 
-const MovieGrid = ({ movies, setSavedMovies, savedMovies }: MovieGridType) => {
+const fetcher = (url: string) =>
+  fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((r) => r.json());
+
+const MovieGrid = ({
+  setSavedMovies,
+  savedMovies,
+  searchTerm,
+  page,
+  setPage,
+}: MovieGridType) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedMovie, setSelectedMovie] = useState<MovieDetails>(
     {} as MovieDetails
   );
+  const [totalRecords, setTotalRecords] = useState(0);
+  const { data: movies, isLoading } = useSWR(
+    `/api/search?term=${searchTerm}&page=${page}`,
+    fetcher
+  );
+
+  useEffect(() => {
+    !isLoading && setTotalRecords(movies?.totalResults);
+  }, [movies, isLoading, setTotalRecords]);
 
   const openMovieModal = (movie: MovieDetails) => {
     setSelectedMovie(movie);
@@ -166,13 +193,30 @@ const MovieGrid = ({ movies, setSavedMovies, savedMovies }: MovieGridType) => {
 
   return (
     <>
-      <SimpleGrid
-        columns={{ base: 2, lg: 5 }}
-        spacing={{ base: "10px", sm: "20px", md: "40px", lg: "20px" }}>
-        {movies.map((movie) => {
-          return <MovieCard key={movie.imdbID} movie={movie} />;
-        })}
-      </SimpleGrid>
+      {!movies || !movies.returnData ? (
+        <SimpleGrid columns={{ sm: 1, md: 2, lg: 5 }} w="full" p={4}>
+          <Skeleton rounded="lg" height="200px" m={5} />
+          <Skeleton rounded="lg" height="200px" m={5} />
+          <Skeleton rounded="lg" height="200px" m={5} />
+          <Skeleton rounded="lg" height="200px" m={5} />
+          <Skeleton rounded="lg" height="200px" m={5} />
+        </SimpleGrid>
+      ) : movies?.returnData.length > 0 ? (
+        <SimpleGrid
+          columns={{ base: 2, lg: 5 }}
+          spacing={{ base: "10px", sm: "20px", md: "40px", lg: "20px" }}>
+          {movies.returnData.map((movie: MovieDetails) => {
+            return <MovieCard key={movie.imdbID} movie={movie} />;
+          })}
+        </SimpleGrid>
+      ) : null}
+      {!movies || !movies.returnData ? null : (
+        <CustomPagination
+          page={page}
+          setPage={setPage}
+          totalRecords={totalRecords}
+        />
+      )}
       <MovieModal
         movie={selectedMovie}
         isOpen={isOpen}

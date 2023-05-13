@@ -15,7 +15,7 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import MovieGrid, { SaveState } from "@/components/movieGrid";
 import useSWR from "swr";
 import CustomPagination from "@/components/pagination";
@@ -23,28 +23,11 @@ import { getSavedMovies } from "@/utils/getSavedMovies";
 import WatchlistGrid from "@/components/watchlistGrid";
 import Head from "next/head";
 
-const fetcher = (url: string) =>
-  fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((r) => r.json());
-
 export default function Home() {
-  const [searchTerm, setSearchTerm] = useState("Avengers");
+  const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(1);
-  const [totalRecords, setTotalRecords] = useState(0);
   const [savedMovies, setSavedMovies] = useState<SaveState>({} as SaveState);
   const [windowSize, setWindowSize] = useState<number[]>([]);
-  const { data: movies, isLoading } = useSWR(
-    `/api/search?term=${searchTerm}&page=${page}`,
-    fetcher
-  );
-
-  useEffect(() => {
-    !isLoading && setTotalRecords(movies?.totalResults);
-  }, [movies, isLoading]);
 
   useEffect(() => {
     getSavedMovies(setSavedMovies);
@@ -91,47 +74,25 @@ export default function Home() {
         <TabPanels>
           <TabPanel>
             <Flex direction={"column"} justifyContent={"center"} gap={10}>
-              {searchTerm.length > 0 && (
-                <SearchInput
-                  initialWord={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                  setPage={setPage}
-                />
-              )}
-              {!movies || !movies.returnData ? (
-                <SimpleGrid columns={{ sm: 1, md: 2, lg: 5 }} w="full" p={4}>
-                  <Skeleton rounded="lg" height="200px" m={5} />
-                  <Skeleton rounded="lg" height="200px" m={5} />
-                  <Skeleton rounded="lg" height="200px" m={5} />
-                  <Skeleton rounded="lg" height="200px" m={5} />
-                  <Skeleton rounded="lg" height="200px" m={5} />
-                </SimpleGrid>
-              ) : movies?.returnData.length > 0 ? (
+              <SearchInput
+                initialWord={searchTerm}
+                setSearchTerm={setSearchTerm}
+                setPage={setPage}
+              />
+              {searchTerm.length > 0 ? (
                 <MovieGrid
-                  movies={movies.returnData}
                   setSavedMovies={setSavedMovies}
                   savedMovies={savedMovies}
-                  windowWidth={windowSize[0]}
-                />
-              ) : null}
-              {!isLoading ? (
-                movies?.returnData.length > 0 ? (
-                  <div style={{ display: "none" }}>
-                    <MovieGrid
-                      movies={movies.returnData}
-                      setSavedMovies={setSavedMovies}
-                      savedMovies={savedMovies}
-                      windowWidth={windowSize[0]}
-                    />
-                  </div>
-                ) : null
-              ) : null}
-              {!movies || !movies.returnData ? null : (
-                <CustomPagination
+                  searchTerm={searchTerm}
                   page={page}
                   setPage={setPage}
-                  totalRecords={totalRecords}
                 />
+              ) : (
+                <Center>
+                  <Text fontWeight="bold" color="white">
+                    {"Use the search bar to look up any movie by title"}
+                  </Text>
+                </Center>
               )}
             </Flex>
           </TabPanel>
@@ -141,9 +102,7 @@ export default function Home() {
               justifyContent={"center"}
               gap={10}
               mt={10}>
-              {isLoading ? (
-                <Skeleton></Skeleton>
-              ) : Object.keys(savedMovies).length > 0 ? (
+              {Object.keys(savedMovies).length > 0 ? (
                 <WatchlistGrid
                   movies={
                     savedMovies
