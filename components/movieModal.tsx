@@ -60,7 +60,10 @@ const MovieModal = ({
   useEffect(() => {
     if (movieDetails) {
       const data = JSON.parse(localStorage.getItem("savedMovies")!);
-      if (Object.keys(data).includes(movieDetails.imdbID)) {
+      const inData = data
+        ? Object.keys(data).includes(movieDetails.imdbID)
+        : false;
+      if (inData) {
         const specificData = data[movieDetails.imdbID];
         setSaved(true);
         setNewReview(specificData.review);

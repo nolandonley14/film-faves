@@ -75,7 +75,9 @@ const MovieGrid = ({ movies, setSavedMovies, savedMovies }: MovieGridType) => {
   };
 
   const MovieCard = ({ movie }: MovieCardType) => {
-    const saved = Object.keys(savedMovies).includes(movie.imdbID);
+    const saved = savedMovies
+      ? Object.keys(savedMovies).includes(movie.imdbID)
+      : false;
     return (
       <Box
         onClick={() => openMovieModal(movie)}

@@ -64,7 +64,9 @@ const WatchlistGrid = ({
   };
 
   const MovieCard = ({ movie }: MovieCardType) => {
-    const saved = Object.keys(savedMovies).includes(movie.movie.imdbID);
+    const saved = savedMovies
+      ? Object.keys(savedMovies).includes(movie.movie.imdbID)
+      : false;
     return (
       <Box
         onClick={() => openMovieModal(movie)}
