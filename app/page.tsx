@@ -40,10 +40,7 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   const [savedMovies, setSavedMovies] = useState<SaveState>({} as SaveState);
-  const [windowSize, setWindowSize] = useState([
-    window.innerWidth,
-    window.innerHeight,
-  ]);
+  const [windowSize, setWindowSize] = useState<number[]>([]);
   const { data: movies, isLoading } = useSWR(
     `/api/search?term=${searchTerm}&page=${page}`,
     fetcher
