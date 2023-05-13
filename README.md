@@ -7,6 +7,5 @@ This project is a movie search and watchlist creator.
 - Mark bookmarked movies as “watched”
 - Remove movies from watchlist
 - Mobile and Desktop friendly
-
-
+- Additional Movie Details available on click
 
