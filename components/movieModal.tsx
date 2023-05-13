@@ -1,8 +1,3 @@
-import {
-  addUpdateReviewForMovie,
-  saveMovieToLocalStorage,
-  setMovieToWatched,
-} from "@/utils/getSavedMovies";
 import { MovieDetails, SavedMovie } from "@/utils/types";
 import {
   AspectRatio,
@@ -14,7 +9,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
   Image,
   VStack,
   Text,
@@ -71,7 +65,6 @@ const MovieModal = ({
         setSaved(true);
         setNewReview(specificData.review);
         setWatched(specificData.watched);
-        //console.log("review", data.review, "editing", editing, data);
       } else {
         setNewReview("");
         setWatched(false);

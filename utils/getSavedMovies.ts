@@ -1,6 +1,6 @@
 import { SaveState } from "@/components/movieGrid";
 import { Dispatch, SetStateAction } from "react";
-import { Movie, MovieDetails, SavedMovie } from "./types";
+import { MovieDetails, SavedMovie } from "./types";
 
 export const getSavedMovies = (setSavedMovies: Dispatch<SetStateAction<SaveState>>) => {
     const value = localStorage.getItem("savedMovies") || "";

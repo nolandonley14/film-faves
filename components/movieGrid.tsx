@@ -8,7 +8,6 @@ import {
   Image,
   Text,
   AspectRatio,
-  Center,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";

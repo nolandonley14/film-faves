@@ -1,6 +1,6 @@
 "use client";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Movie, MovieDetails, SavedMovie } from "@/utils/types";
+import { SavedMovie } from "@/utils/types";
 import {
   Box,
   Flex,
@@ -8,7 +8,6 @@ import {
   Image,
   Text,
   AspectRatio,
-  Center,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -17,7 +16,6 @@ import { SiRottentomatoes } from "react-icons/si";
 import { FaImdb } from "react-icons/fa";
 import {
   addUpdateReviewForMovie,
-  getSavedMovies,
   removeMovie,
   saveMovieToLocalStorage,
   setMovieToWatched,
@@ -28,7 +26,6 @@ type WatchlistGridType = {
   movies: SavedMovie[];
   setSavedMovies: Dispatch<SetStateAction<SaveState>>;
   savedMovies: SaveState;
-  windowWidth: number;
 };
 
 type MovieCardType = {
@@ -43,17 +40,11 @@ const WatchlistGrid = ({
   movies,
   setSavedMovies,
   savedMovies,
-  windowWidth,
 }: WatchlistGridType) => {
-  //const [savedMovies, setSavedMovies] = useState<SaveState>({} as SaveState);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedMovie, setSelectedMovie] = useState<SavedMovie>(
     {} as SavedMovie
   );
-
-  //   useEffect(() => {
-  //     getSavedMovies(setSavedMovies);
-  //   }, [setSavedMovies]);
 
   const openMovieModal = (movie: SavedMovie) => {
     setSelectedMovie(movie);
@@ -180,11 +171,5 @@ const WatchlistGrid = ({
     </>
   );
 };
-
-// background: rgba(255, 255, 255, 0.35);
-// border-radius: 16px;
-// box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-// backdrop-filter: blur(16.2px);
-// -webkit-backdrop-filter: blur(16.2px);
 
 export default WatchlistGrid;

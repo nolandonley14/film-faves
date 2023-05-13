@@ -2,14 +2,11 @@
 import CustomNavigation from "@/components/navigation";
 import SearchInput from "@/components/searchInput";
 import {
-  Accordion,
   Box,
   Center,
-  Container,
   Flex,
   SimpleGrid,
   Skeleton,
-  Stack,
   Tab,
   TabIndicator,
   TabList,
@@ -19,7 +16,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { MovieDetails, SavedMovie } from "@/utils/types";
 import MovieGrid, { SaveState } from "@/components/movieGrid";
 import useSWR from "swr";
 import CustomPagination from "@/components/pagination";
@@ -35,7 +31,6 @@ const fetcher = (url: string) =>
   }).then((r) => r.json());
 
 export default function Home() {
-  const [word, setWord] = useState("Avengers");
   const [searchTerm, setSearchTerm] = useState("Avengers");
   const [page, setPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -92,9 +87,9 @@ export default function Home() {
         <TabPanels>
           <TabPanel>
             <Flex direction={"column"} justifyContent={"center"} gap={10}>
-              {word.length > 0 && (
+              {searchTerm.length > 0 && (
                 <SearchInput
-                  initialWord={word}
+                  initialWord={searchTerm}
                   setSearchTerm={setSearchTerm}
                   setPage={setPage}
                 />
@@ -149,7 +144,6 @@ export default function Home() {
                   )}
                   setSavedMovies={setSavedMovies}
                   savedMovies={savedMovies}
-                  windowWidth={windowSize[0]}
                 />
               ) : (
                 <Center>
